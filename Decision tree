@@ -1,0 +1,58 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn import tree
+import matplotlib.pyplot as plt
+
+# Load the dataset
+from sklearn.datasets import load_iris
+data = load_iris()
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = pd.Series(data.target)
+
+# Print out the features matrix (X)
+print("Features matrix (X):")
+print(X.head())  # show the first 5 rows of X
+
+# Print out the target vector (y)
+print("\nTarget vector (y):")
+print(y.head())  # show the first 5 rows of y
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Print the shapes of the training and testing data
+print("\nTraining features shape:", X_train.shape)
+print("Training labels shape:", y_train.shape)
+print("Testing features shape:", X_test.shape)
+print("Testing labels shape:", y_test.shape)
+
+# Initialize the Decision Tree Classifier
+classifier = DecisionTreeClassifier(random_state=42)
+
+# Create a pipeline with the classifier
+pipeline = Pipeline(steps=[('classifier', classifier)])
+
+# Train the Decision Tree Classifier
+pipeline.fit(X_train, y_train)
+
+# Print out the decision tree
+print("\nDecision Tree:")
+tree.plot_tree(pipeline.named_steps['classifier'], feature_names=data.feature_names, class_names=data.target_names, filled=True)
+plt.show()
+
+# Make predictions on the test data
+y_pred = pipeline.predict(X_test)
+
+# Print out the accuracy of the classifier
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\nAccuracy: {accuracy:.2f}")
+
+# Print out the classification report
+
+
+# Print out the predictions on test data
+print("Predictions on test data:")
+print(y_pred)

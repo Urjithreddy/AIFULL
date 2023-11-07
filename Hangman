@@ -1,0 +1,107 @@
+board = ['''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========''']
+
+
+
+class Hangman:
+    def __init__(self, word):
+        self.word = word
+        self.ml = []  # Missed letters
+        self.gl = []  # Guessed letters
+        
+    def guess(self, letter):
+        if letter in self.word and letter not in self.gl:
+            self.gl.append(letter)
+        elif letter not in self.word and letter not in self.ml:
+            self.ml.append(letter)
+        else:
+            return False
+        return True
+        
+    def hangman_over(self):
+        return self.hangman_won() or (len(self.ml) == 6)
+        
+    def hangman_won(self):
+        return '_' not in self.hide_word()
+        
+    def hide_word(self):
+        return ''.join('_' if letter not in self.gl else letter for letter in self.word)
+        
+    def print_game_status(self):
+        print(board[len(self.ml)])
+        print('\nWord: ' + self.hide_word())
+        print('\nWrong letters: ', end=' ')
+        print(' '.join(self.ml))
+        print('\nCorrect letters: ', end=' ')
+        print(' '.join(self.gl))
+        print()
+
+# Function to return the word "Dictionary"
+def rand_word():
+    return "Dictionary"
+
+# Initialize the game with the word "Dictionary"
+game = Hangman(rand_word())
+
+while not game.hangman_over():
+    game.print_game_status()
+    user_input = input('\nType a letter: ')
+    game.guess(user_input)
+
+game.print_game_status()
+
+if game.hangman_won():
+    print('\nCongratulations! You won!!')
+else:
+    print('\nGame over! You lost.')
+    print('The correct word was ' + game.word)
+    
+print('\nIt was nice playing with you!\n')
